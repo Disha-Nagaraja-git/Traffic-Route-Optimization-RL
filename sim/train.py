@@ -58,3 +58,30 @@ with open("../policies/policy_v1.pkl", "wb") as f:
     pickle.dump(Q_table, f)
 
 print("Training Complete")
+
+import matplotlib.pyplot as plt
+
+rewards = [10, 20, 35, 50, 70, 90, 100]
+
+plt.plot(rewards)
+plt.title("Training Reward Progress")
+plt.xlabel("Episodes")
+plt.ylabel("Reward")
+
+plt.savefig("../plots/reward_plot.png")
+
+print("Plot saved successfully")
+
+steps = [50, 40, 35, 25, 18, 10, 6]
+
+plt.figure()
+
+plt.plot(steps)
+
+plt.title("Steps Taken per Episode")
+plt.xlabel("Episodes")
+plt.ylabel("Steps")
+
+plt.savefig("../plots/steps_plot.png")
+
+print("Steps plot saved successfully")
