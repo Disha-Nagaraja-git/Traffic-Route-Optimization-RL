@@ -1,5 +1,7 @@
 import numpy as np
 import pickle
+import csv
+import matplotlib.pyplot as plt
 
 from maze_env import *
 
@@ -12,6 +14,7 @@ MAX_STEPS = 100
 Q_table = np.zeros((ROWS, COLS, 4))
 
 rewards_per_episode = []
+steps_per_episode = []
 
 for episode in range(EPISODES):
 
@@ -53,30 +56,48 @@ for episode in range(EPISODES):
             break
 
     rewards_per_episode.append(total_reward)
+    steps_per_episode.append(step + 1)
 
+# Save trained policy
 with open("../policies/policy_v1.pkl", "wb") as f:
     pickle.dump(Q_table, f)
 
 print("Training Complete")
 
-import matplotlib.pyplot as plt
+# Save experiment results CSV
+with open("../experiments/experiment_1.csv", "w", newline="") as file:
 
-rewards = [10, 20, 35, 50, 70, 90, 100]
+    writer = csv.writer(file)
 
-plt.plot(rewards)
+    writer.writerow(["episode", "reward", "steps"])
+
+    for i in range(len(rewards_per_episode)):
+
+        writer.writerow([
+            i + 1,
+            rewards_per_episode[i],
+            steps_per_episode[i]
+        ])
+
+print("Experiment CSV saved successfully")
+
+# Reward Plot
+plt.figure()
+
+plt.plot(rewards_per_episode)
+
 plt.title("Training Reward Progress")
 plt.xlabel("Episodes")
 plt.ylabel("Reward")
 
 plt.savefig("../plots/reward_plot.png")
 
-print("Plot saved successfully")
+print("Reward plot saved successfully")
 
-steps = [50, 40, 35, 25, 18, 10, 6]
-
+# Steps Plot
 plt.figure()
 
-plt.plot(steps)
+plt.plot(steps_per_episode)
 
 plt.title("Steps Taken per Episode")
 plt.xlabel("Episodes")
